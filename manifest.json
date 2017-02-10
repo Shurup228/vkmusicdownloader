@@ -9,7 +9,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://vk.com/audios*"],
+      "matches": ["https://vk.com/audios*"],
       "js": ["content.js"]
     }
   ],
@@ -20,7 +20,8 @@
   },
 
   "permissions": [
-    "downloads"
+    "downloads",
+    "tabs"
   ],
 
   "browser_action": {
