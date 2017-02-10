@@ -1,14 +1,33 @@
 {
   "manifest_version": 2,
   "name": "vk music downloader",
+  "description": "Downloads music from vk",
   "version": "1.0",
   "icons": {
     "16": "icon.png"
   },
+
   "content_scripts": [
     {
-      "matches": ["https://vk.com/audios*"],
+      "matches": ["*://vk.com/audios*"],
       "js": ["content.js"]
     }
-  ]
+  ],
+
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+
+  "permissions": [
+    "downloads"
+  ],
+
+  "browser_action": {
+    "default_icon": {
+      "16": "icon.png"
+    },
+    "default_title": "Download",
+    "default_popup": "popup.html"
+  }
 }
