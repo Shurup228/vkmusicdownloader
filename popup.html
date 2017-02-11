@@ -3,14 +3,35 @@
   <head>
     <script defer type="text/javascript" src="background.js"></script>
     <style type="text/css">
-    button {
-      margin: 10px;
+    * {
+      margin: 0px;
+    }
+    p {
       padding: 10px;
+      background: none;
+      border: none;
+      white-space: nowrap;
+      font-family: Arial;
+      font-weight: bold;
+      font-size: 1em;
+    }
+    .container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .container:hover {
+      background-color: rgba(100, 149, 237, 0.5);
+      color: white;
     }
     </style>
   </head>
   <body>
-    <button id="download">Download all</button>
-    <button id="setFolder">Choose folder</button>
+    <div class="container" id="download">
+      <img src="button.png" style="margin-right: 6px;">
+      <p>Download all</p>
+    </div>
   </body>
 </html>
