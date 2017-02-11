@@ -21,7 +21,8 @@
 
   "permissions": [
     "downloads",
-    "tabs"
+    "tabs",
+    "storage"
   ],
 
   "browser_action": {
