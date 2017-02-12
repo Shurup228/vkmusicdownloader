@@ -19,15 +19,24 @@
 
       const l = window.ap._currentPlaylist._ref._list.length; // getting length of audios
 
-      for (let i = 0; i < l; i++) {
-        const title = window.ap._currentAudio[TITLE];
-        const author = window.ap._currentAudio[AUTHOR];
-        const url = window.ap._currentAudio[URL];
+      // When you fiercely skip songs vk will not load them.
+      // So u need to stay on song some time, to get it's url
+
+      setTimeout(() => (function getSong(index) {
+        if (index >= l) return;
+
+        let title = window.ap._currentAudio[TITLE];
+        let author = window.ap._currentAudio[AUTHOR];
+        let url = window.ap._currentAudio[URL];
 
         const D = new CustomEvent('download_music', { detail:
           { author: author, url: url, title: title }, });
-        document.dispatchEvent(D);
-      }
+        document.dispatchEvent(D); // Passing data to bg.js for downloading
+
+        window.ap.playNext(); // Getting next song
+
+        setTimeout(() => getSong(index + 1), 1000); // Cauz vk need some time to load song
+      })(0), 1000);
     } + ')();';
 
     document.head.appendChild(injScript); // Injecting script
@@ -36,21 +45,19 @@
   }
 
   chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
-    console.log('mda');
     document.addEventListener('download_music', (e) => chrome.runtime.sendMessage(e.detail));
 
     const bottom = document.getElementById('ui_audio_load_more');
 
     bottom.addEventListener('endOfList', () => inject());
-    bottom.dispatchEvent(EVENT);
 
-    // const label = setInterval(() => {
-    //   bottom.scrollIntoView();
-    //   if (bottom.style.display === 'none') {
-    //     clearInterval(label);
-    //     bottom.dispatchEvent(EVENT);
-    //   }
-    // }, 500);
+    const label = setInterval(() => {
+      bottom.scrollIntoView();
+      if (bottom.style.display === 'none') {
+        clearInterval(label);
+        bottom.dispatchEvent(EVENT);
+      }
+    }, 500);
 
   });
 }
