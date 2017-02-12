@@ -14,13 +14,14 @@
       const AUTHOR = 4;
 
       const audio = document.querySelector('div.audio_row');
-      audio.click(); // Forcing vk to get url
-      window.ap.setVolume(0);
+      audio.click(); // Start player, so vk need to get url
+      window.ap.setVolume(0); // We will be quiet ;)
 
       const l = window.ap._currentPlaylist._ref._list.length; // getting length of audios
 
       // When you fiercely skip songs vk will not load them.
       // So u need to stay on song some time, to get it's url
+      // Function below is my way of creating delay
 
       setTimeout(() => (function getSong(index) {
         if (index >= l) return;
@@ -35,7 +36,7 @@
 
         window.ap.playNext(); // Getting next song
 
-        setTimeout(() => getSong(index + 1), 1000); // Cauz vk need some time to load song
+        setTimeout(() => getSong(index + 1), 1000); // Cauzing delay
       })(0), 1000);
     } + ')();';
 
@@ -48,7 +49,6 @@
     document.addEventListener('download_music', (e) => chrome.runtime.sendMessage(e.detail));
 
     const bottom = document.getElementById('ui_audio_load_more');
-
     bottom.addEventListener('endOfList', () => inject());
 
     const label = setInterval(() => {
