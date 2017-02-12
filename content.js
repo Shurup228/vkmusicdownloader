@@ -21,7 +21,7 @@
 
       // When you fiercely skip songs vk will not load them.
       // So u need to stay on song some time, to get it's url
-      // Function below is my way of creating delay
+      // Function below is my way of creating delay for that thing to happen
 
       setTimeout(() => (function getSong(index) {
         if (index >= l) return;
@@ -45,7 +45,7 @@
     console.log('Script injected successfuly...');
   }
 
-  chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
+  chrome.runtime.onMessage.addListener(function (mes, sen, resp) { // If button in popup pressed
     document.addEventListener('download_music', (e) => chrome.runtime.sendMessage(e.detail));
 
     const bottom = document.getElementById('ui_audio_load_more');

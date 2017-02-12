@@ -1,13 +1,13 @@
 'use strict'
 
 {
-  const QUEUE = [];
-  const D = new Event('download_started');
-  let BUFFER = [];
+  const D = new Event('download_started'); // To start filling buffer and queue
+  const QUEUE = []; // Queue of items to download
+  let BUFFER = []; // Current downloading items
+  let FILES = listDirectory(); // Array of downloaded songs
 
   const popup = chrome.extension.getViews({ type: 'popup' })[0];
   const doc = popup.document;
-
   const cont = doc.getElementById('download');
 
   cont.addEventListener('mouseover', function () {
@@ -30,17 +30,25 @@
   });
 
   chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
-    chrome.downloads.download({ url: mes.url, filename: mes.author + ' - ' + mes.title },
-    (item) => QUEUE.push(item));
-    doc.dispatchEvent(D);
+    if (FILES.includes(mes.author + ' - ' + mes.title)) return; // If song already downloaded
+    QUEUE.push(item);
+    doc.dispatchEvent(D); // Starting to monitor queue and buffer
   });
 
   doc.addEventListener('download_started', function () {
     const ID = setInterval(function () {
       console.log(`queue: ${QUEUE}\nbuffer: ${BUFFER}`);
       BUFFER = BUFFER.filter((el, i, arr) => el.state != 'complete');
-      if (BUFFER.length < 10) BUFFER.push(QUEUE.pop());
+      if (BUFFER.length < 10) {
+        let curItem = QUEUE.pop();
+        chrome.downloads.download(
+          { url: curItem.url, filename: curItem.author + ' - ' + curItem.title },
+          (el) => BUFFER.push(el));
+      }
+
       if ((!QUEUE.length) && (!BUFFER.length)) clearInterval(ID);;
     }, 1000);
   });
+
+  function listDirectory() {}
 }
