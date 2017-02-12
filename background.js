@@ -23,4 +23,8 @@
       chrome.tabs.sendMessage(t.id, { clicked: 'downloadButton' }, function (response) {});
     });
   });
+
+  chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
+    console.log(mes);
+  });
 }
