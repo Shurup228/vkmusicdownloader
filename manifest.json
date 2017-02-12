@@ -23,6 +23,7 @@
     "downloads",
     "tabs",
     "storage"
+    "file://*"
   ],
 
   "browser_action": {
