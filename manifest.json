@@ -22,8 +22,9 @@
   "permissions": [
     "downloads",
     "tabs",
-    "storage"
-    "file://*"
+    "storage",
+    "file:///*",
+    "fileSystem"
   ],
 
   "browser_action": {

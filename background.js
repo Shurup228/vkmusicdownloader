@@ -1,8 +1,13 @@
 'use strict'
 
 {
+  function listDirectory() {
+    var url = 'file:///';
+    chrome.fileSystem.chooseEntry({ options: 'openDirectory' },  (entry) => console.log(entry));
+  }
+
   const QUEUE = [];
-  const BUFFER = [];
+  let BUFFER = [];
 
   const popup = chrome.extension.getViews({ type: 'popup' })[0];
   const doc = popup.document;
@@ -12,6 +17,7 @@
   cont.addEventListener('mouseover', function () {
     const img = cont.querySelector('img');
     img.setAttribute('src', 'button_white.png');
+    listDirectory();
   });
 
   cont.addEventListener('mouseleave', function () {
