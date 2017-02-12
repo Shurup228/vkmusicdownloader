@@ -1,16 +1,35 @@
 'use strict'
 
-function scrollBottom() {
-  const bottom = document.getElementById('ui_audio_load_more');
-  var disp = bottom.style.display;
-  while (disp !== 'none') {
-    bottom.scrollIntoView();
-    console.log(`display: ${bottom.style.display}`);
-    disp = bottom.style.display;
-  }
-}
+{
+  var EVENT = new Event('endOfList');
 
-chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
-  console.log('lol');
-  scrollBottom();
-});
+  function inject() {
+    console.log('Injecting script...');
+
+    const injScript = document.createElement('script');
+
+    injScript.textContent = '(' + function () {
+      const audios = document.querySelectorAll('div.audio_row');
+      audios[0].click();
+      console.log(window.ap);
+    } + ')();';
+
+    document.head.appendChild(injScript); // Injecting script
+    injScript.remove();
+    console.log('Script injected successfuly...');
+  }
+
+  chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
+    const bottom = document.getElementById('ui_audio_load_more');
+    bottom.addEventListener('endOfList', () => inject());
+    bottom.dispatchEvent(EVENT);
+
+  //   const label = setInterval(() => {
+  //     bottom.scrollIntoView();
+  //     if (bottom.style.display === 'none') {
+  //       clearInterval(label);
+  //       bottom.dispatchEvent(EVENT);
+  //     }
+  //   }, 500);
+  });
+}
