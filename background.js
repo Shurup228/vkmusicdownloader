@@ -38,7 +38,8 @@
   doc.addEventListener('download_started', function () {
     const ID = setInterval(function () {
       console.log(`queue: ${QUEUE}\nbuffer: ${BUFFER}`);
-      BUFFER = BUFFER.filter((el, i, arr) => el.state != 'complete');
+      BUFFER = BUFFER.filter((el, i, arr) => el.state != 'complete'); // Clear from downloaded
+
       if (BUFFER.length < 10) {
         let curItem = QUEUE.pop();
         chrome.downloads.download(
@@ -46,7 +47,7 @@
           (el) => BUFFER.push(el));
       }
 
-      if ((!QUEUE.length) && (!BUFFER.length)) clearInterval(ID);;
+      if ((!QUEUE.length) && (!BUFFER.length)) clearInterval(ID);
     }, 1000);
   });
 
