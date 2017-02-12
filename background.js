@@ -19,7 +19,7 @@
   cont.addEventListener('click', function () {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const t = tabs[0];
-      if (!t.url.startsWith('https://vk.com/audios')) alert('This is not vk[audio] page!');
+      if (!t.url.startsWith('https://vk.com/audio')) alert('This is not vk[audio] page!');
       chrome.tabs.sendMessage(t.id, { clicked: 'downloadButton' }, function (response) {});
     });
   });

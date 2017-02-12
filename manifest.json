@@ -9,7 +9,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://vk.com/audios*"],
+      "matches": ["https://vk.com/audio*"],
       "js": ["content.js"]
     }
   ],
