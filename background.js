@@ -1,12 +1,8 @@
 'use strict'
 
 {
-  function listDirectory() {
-    var url = 'file:///';
-    chrome.fileSystem.chooseEntry({ options: 'openDirectory' },  (entry) => console.log(entry));
-  }
-
   const QUEUE = [];
+  const D = new Event('download_started');
   let BUFFER = [];
 
   const popup = chrome.extension.getViews({ type: 'popup' })[0];
@@ -36,12 +32,15 @@
   chrome.runtime.onMessage.addListener(function (mes, sen, resp) {
     chrome.downloads.download({ url: mes.url, filename: mes.author + ' - ' + mes.title },
     (item) => QUEUE.push(item));
+    doc.dispatchEvent(D);
   });
 
-  while (true) {
-    console.log(`queue: ${QUEUE}\nbuffer: ${BUFFER}`);
-    BUFFER = BUFFER.filter((el, i, arr) => el.state != 'complete');
-    if (BUFFER.length < 10) BUFFER.push(QUEUE.pop());
-    if ((!QUEUE.length) && (!BUFFER.length)) break;
-  }
+  doc.addEventListener('download_started', function () {
+    const ID = setInterval(function () {
+      console.log(`queue: ${QUEUE}\nbuffer: ${BUFFER}`);
+      BUFFER = BUFFER.filter((el, i, arr) => el.state != 'complete');
+      if (BUFFER.length < 10) BUFFER.push(QUEUE.pop());
+      if ((!QUEUE.length) && (!BUFFER.length)) clearInterval(ID);;
+    }, 1000);
+  });
 }
